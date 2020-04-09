@@ -1,4 +1,5 @@
 ﻿using FinancNet.Models;
+using FinancNet.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancNet.Controllers
@@ -7,33 +8,50 @@ namespace FinancNet.Controllers
     [ApiController]
     public class ContaController : ControllerBase
     {
+        private IContaService _contaService;
+
+        public ContaController(IContaService contaService)
+        {
+            _contaService = contaService;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok("get contas");
+            return Ok(_contaService.FindAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(long id)
         {
-            return Ok("get conta");
+            var conta = _contaService.FindById(id);
+
+            if (conta == null) return NotFound();
+
+            return Ok(conta);
         }
 
         [HttpPost]
         public IActionResult Post([FromBody]Conta conta)
         {
-            return Ok("post conta");
+            if (conta == null) return BadRequest();
+
+            return new ObjectResult(_contaService.Create(conta));
         }
 
         [HttpPut("{id}")]
         public IActionResult Put([FromBody] Conta conta)
         {
-            return Ok("put conta");
+            if (conta == null) return BadRequest();
+
+            return new ObjectResult(_contaService.Update(conta));
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            _contaService.Delete(id);
+
             return NoContent();
         }
     }
