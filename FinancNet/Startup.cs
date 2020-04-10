@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http.Cors;
+using FinancNet.Models.Context;
 using FinancNet.Services;
 using FinancNet.Services.Impl;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinancNet
 {
@@ -28,6 +30,9 @@ namespace FinancNet
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connection = Configuration["PostgreSqlConnection:PostgreSqlConnectionString"];
+            services.AddDbContext<PostgreSqlContext>(options => options.UseNpgsql(connection));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddScoped<IContaService, ContaServiceImpl>();

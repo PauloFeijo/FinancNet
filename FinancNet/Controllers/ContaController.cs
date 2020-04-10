@@ -40,9 +40,11 @@ namespace FinancNet.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromBody] Conta conta)
+        public IActionResult Put([FromBody] Conta conta, int id)
         {
             if (conta == null) return BadRequest();
+
+            conta.id = id;
 
             return new ObjectResult(_contaService.Update(conta));
         }
