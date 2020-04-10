@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using FinancNet.Repositories;
+using FinancNet.Repositories.Impl;
 
 namespace FinancNet
 {
@@ -36,6 +38,7 @@ namespace FinancNet
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddScoped<IContaService, ContaServiceImpl>();
+            services.AddScoped<IContaRepository, ContaRepositoryImpl>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,23 +8,23 @@ namespace FinancNet.Controllers
     [ApiController]
     public class ContaController : ControllerBase
     {
-        private IContaService _contaService;
+        private IContaService serv;
 
-        public ContaController(IContaService contaService)
+        public ContaController(IContaService serv)
         {
-            _contaService = contaService;
+            this.serv = serv;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_contaService.FindAll());
+            return Ok(serv.FindAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(long id)
         {
-            var conta = _contaService.FindById(id);
+            var conta = serv.FindById(id);
 
             if (conta == null) return NotFound();
 
@@ -36,7 +36,7 @@ namespace FinancNet.Controllers
         {
             if (conta == null) return BadRequest();
 
-            return new ObjectResult(_contaService.Create(conta));
+            return new ObjectResult(serv.Create(conta));
         }
 
         [HttpPut("{id}")]
@@ -46,13 +46,13 @@ namespace FinancNet.Controllers
 
             conta.id = id;
 
-            return new ObjectResult(_contaService.Update(conta));
+            return new ObjectResult(serv.Update(conta));
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _contaService.Delete(id);
+            serv.Delete(id);
 
             return NoContent();
         }

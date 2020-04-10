@@ -4,75 +4,44 @@ using System.Linq;
 using System.Threading.Tasks;
 using FinancNet.Models;
 using FinancNet.Models.Context;
+using FinancNet.Repositories;
 
 namespace FinancNet.Services.Impl
 {
     public class ContaServiceImpl : IContaService
     {
-        private PostgreSqlContext _context;
+        private IContaRepository repo;
 
-        public ContaServiceImpl(PostgreSqlContext context)
+        public ContaServiceImpl(IContaRepository repo)
         {
-            _context = context;
+            this.repo = repo;
         }
 
         public Conta Create(Conta conta)
         {
-            try
-            {
-                conta.id = 0;
-                conta.saldo = 0;
-                _context.Add(conta);
-                _context.SaveChanges();
-                return conta;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            conta.id = 0;
+            conta.saldo = 0;
+            return repo.Create(conta);
         }
 
         public void Delete(long id)
         {
-            try
-            {
-                Conta _conta = FindById(id);
-                if (_conta == null) return;
-
-                _context.conta.Remove(_conta);
-                _context.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            repo.Delete(id);
         }
 
         public List<Conta> FindAll()
         {
-            return _context.conta.ToList();
+            return repo.FindAll();
         }
 
         public Conta FindById(long id)
         {
-            return _context.conta.SingleOrDefault(p => p.id.Equals(id));
+            return repo.FindById(id);
         }
 
         public Conta Update(Conta conta)
         {
-            try
-            {
-                Conta _conta = FindById(conta.id);
-                if (_conta == null) return null;
-
-                _context.Entry(_conta).CurrentValues.SetValues(conta);
-                _context.SaveChanges();
-                return conta;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return repo.Update(conta);
         }
     }
 }
