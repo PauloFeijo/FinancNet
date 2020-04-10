@@ -1,17 +1,17 @@
-﻿using System;
+﻿using FinancNet.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using FinancNet.Models;
-using FinancNet.Models.Context;
+using FinancNet.Repositories.Context;
 
 namespace FinancNet.Repositories.Impl
 {
     public class ContaRepositoryImpl : IContaRepository
     {
-        private PostgreSqlContext ctx;
+        private Contexto ctx;
 
-        public ContaRepositoryImpl(PostgreSqlContext ctx)
+        public ContaRepositoryImpl(Contexto ctx)
         {
             this.ctx = ctx;
         }

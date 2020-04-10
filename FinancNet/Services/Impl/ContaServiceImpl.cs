@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FinancNet.Models;
-using FinancNet.Models.Context;
+﻿using FinancNet.Models;
 using FinancNet.Repositories;
+using System.Collections.Generic;
 
 namespace FinancNet.Services.Impl
 {
