@@ -34,6 +34,8 @@ namespace FinancNet
 
             services.AddScoped<IContaService, ContaServiceImpl>();
             services.AddScoped<IContaRepository, ContaRepositoryImpl>();
+            services.AddScoped<ICategoriaService, CategoriaServiceImpl>();
+            services.AddScoped<ICategoriaRepository, CategoriaRepositoryImpl>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

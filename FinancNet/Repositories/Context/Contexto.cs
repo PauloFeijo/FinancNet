@@ -13,5 +13,6 @@ namespace FinancNet.Repositories.Context
         public Contexto(DbContextOptions<Contexto> options) : base(options) { }
 
         public DbSet<Conta> conta { get; set; }
+        public DbSet<Categoria> categoria { get; set; }
     }
 }
