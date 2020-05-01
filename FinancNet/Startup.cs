@@ -32,10 +32,8 @@ namespace FinancNet
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddScoped<IContaService, ContaServiceImpl>();
-            services.AddScoped<ICategoriaService, CategoriaServiceImpl>();
-
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IService<>), typeof(Service<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

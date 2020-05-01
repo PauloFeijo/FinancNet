@@ -7,9 +7,9 @@ namespace FinancNet.Controllers
     [Route ("[controller]")]
     [ApiController]
     public class CategoriaController : ControllerBase {
-        private ICategoriaService serv;
+        private IService<Categoria> serv;
 
-        public CategoriaController (ICategoriaService serv) {
+        public CategoriaController(IService<Categoria> serv) {
             this.serv = serv;
         }
 

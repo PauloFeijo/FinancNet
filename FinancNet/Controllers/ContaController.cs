@@ -8,9 +8,9 @@ namespace FinancNet.Controllers
     [ApiController]
     public class ContaController : ControllerBase
     {
-        private IContaService serv;
+        private IService<Conta> serv;
 
-        public ContaController(IContaService serv)
+        public ContaController(IService<Conta> serv)
         {
             this.serv = serv;
         }

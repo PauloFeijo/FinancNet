@@ -17,4 +17,13 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Services\Impl\Service.cs.bak">
+      <DependentUpon>Service.cs</DependentUpon>
+    </None>
+    <None Update="Services\IService.cs.bak">
+      <DependentUpon>IService.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>
