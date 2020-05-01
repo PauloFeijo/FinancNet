@@ -6,9 +6,9 @@ namespace FinancNet.Services.Impl
 {
     public class ContaServiceImpl : IContaService
     {
-        private IContaRepository repo;
+        private IRepository<Conta> repo;
 
-        public ContaServiceImpl(IContaRepository repo)
+        public ContaServiceImpl(IRepository<Conta> repo)
         {
             this.repo = repo;
         }

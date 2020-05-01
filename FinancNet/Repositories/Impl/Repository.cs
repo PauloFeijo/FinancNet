@@ -7,22 +7,24 @@ using FinancNet.Repositories.Context;
 
 namespace FinancNet.Repositories.Impl
 {
-    public class ContaRepositoryImpl : IContaRepository
+    public class Repository<T> : IRepository<T> where T : Entity
     {
         private Contexto ctx;
+        private DbSet<T> dataset;
 
-        public ContaRepositoryImpl(Contexto ctx)
+        public Repository(Contexto ctx)
         {
             this.ctx = ctx;
+            dataset = ctx.Set<T>();
         }
 
-        public Conta Create(Conta conta)
+        public T Create(T item)
         {
             try
             {
-                ctx.Add(conta);
+                dataset.Add(item);
                 ctx.SaveChanges();
-                return conta;
+                return item;
             }
             catch (Exception e)
             {
@@ -34,10 +36,10 @@ namespace FinancNet.Repositories.Impl
         {
             try
             {
-                Conta contaDb = FindById(id);
-                if (contaDb == null) return;
+                T itemDb = FindById(id);
+                if (itemDb == null) return;
 
-                ctx.conta.Remove(contaDb);
+                dataset.Remove(itemDb);
                 ctx.SaveChanges();
             }
             catch (Exception e)
@@ -46,26 +48,26 @@ namespace FinancNet.Repositories.Impl
             }
         }
 
-        public List<Conta> FindAll()
+        public List<T> FindAll()
         {
-            return ctx.conta.ToList();
+            return dataset.ToList();
         }
 
-        public Conta FindById(long id)
+        public T FindById(long id)
         {
-            return ctx.conta.SingleOrDefault(p => p.id.Equals(id));
+            return dataset.SingleOrDefault(p => p.id.Equals(id));
         }
 
-        public Conta Update(Conta conta)
+        public T Update(T item)
         {
             try
             {
-                Conta contaDb = FindById(conta.id);
-                if (contaDb == null) return null;
+                T itemDb = FindById(item.id);
+                if (itemDb == null) return null;
 
-                ctx.Entry(contaDb).CurrentValues.SetValues(conta);
+                ctx.Entry(itemDb).CurrentValues.SetValues(itemDb);
                 ctx.SaveChanges();
-                return contaDb;
+                return itemDb;
             }
             catch (Exception e)
             {

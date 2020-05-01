@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FinancNet.Models
 {
-    public class Conta
+    public class Conta : Entity
     {
-        public long id { get; set; }
-
         [Required]
         public String descricao { get; set; }
 

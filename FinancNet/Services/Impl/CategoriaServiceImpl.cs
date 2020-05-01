@@ -6,9 +6,9 @@ namespace FinancNet.Services.Impl
 {
     public class CategoriaServiceImpl : ICategoriaService
     {
-        private ICategoriaRepository repo;
+        private IRepository<Categoria> repo;
 
-        public CategoriaServiceImpl(ICategoriaRepository repo)
+        public CategoriaServiceImpl(IRepository<Categoria> repo)
         {
             this.repo = repo;
         }

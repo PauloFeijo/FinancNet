@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace FinancNet.Models
 {
-    public class Categoria
+    public class Categoria : Entity
     {
-        public long id { get; set; }
-
         [Required]
         public string descricao { get; set; }
 
