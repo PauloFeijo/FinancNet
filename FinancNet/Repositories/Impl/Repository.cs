@@ -9,8 +9,8 @@ namespace FinancNet.Repositories.Impl
 {
     public class Repository<T> : IRepository<T> where T : Entity
     {
-        private Contexto ctx;
-        private DbSet<T> dataset;
+        protected Contexto ctx;
+        protected DbSet<T> dataset;
 
         public Repository(Contexto ctx)
         {
@@ -48,7 +48,7 @@ namespace FinancNet.Repositories.Impl
             }
         }
 
-        public List<T> FindAll()
+        public virtual List<T> FindAll()
         {
             return dataset.ToList();
         }
@@ -65,7 +65,7 @@ namespace FinancNet.Repositories.Impl
                 T itemDb = FindById(item.id);
                 if (itemDb == null) return null;
 
-                ctx.Entry(itemDb).CurrentValues.SetValues(itemDb);
+                ctx.Entry(itemDb).CurrentValues.SetValues(item);
                 ctx.SaveChanges();
                 return itemDb;
             }
