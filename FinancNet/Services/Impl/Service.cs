@@ -13,13 +13,13 @@ namespace FinancNet.Services.Impl
             this.repo = repo;
         }
 
-        public T Create(T item)
+        public virtual T Create(T item)
         {
             item.id = 0;
             return repo.Create(item);
         }
 
-        public void Delete(long id)
+        public virtual void Delete(long id)
         {
             repo.Delete(id);
         }
@@ -34,7 +34,7 @@ namespace FinancNet.Services.Impl
             return repo.FindById(id);
         }
 
-        public T Update(T item)
+        public virtual T Update(T item)
         {
             return repo.Update(item);
         }
