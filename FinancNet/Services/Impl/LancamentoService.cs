@@ -43,7 +43,7 @@ namespace FinancNet.Services.Impl
             this.servConta = servConta;
         }
 
-        public Lancamento Create(Lancamento item)
+        public override Lancamento Create(Lancamento item)
         {
             SetTipo(item);
             Lancamento lanc = base.Create(item);
@@ -51,7 +51,7 @@ namespace FinancNet.Services.Impl
             return lanc;
         }
 
-        public Lancamento Update(Lancamento item)
+        public override Lancamento Update(Lancamento item)
         {
             long oldContaId = FindById(item.id).contaId;
 
@@ -67,7 +67,7 @@ namespace FinancNet.Services.Impl
             return lanc;
         }
 
-        public virtual void Delete(long id)
+        public override void Delete(long id)
         {
             long contaId = FindById(id).contaId;
             base.Delete(id);

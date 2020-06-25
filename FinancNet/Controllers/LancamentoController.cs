@@ -8,7 +8,7 @@ namespace FinancNet.Controllers
     [ApiController]
     public class LancamentoController : Controller<Lancamento>
     {
-        private new ILancamentoService serv;
+        private ILancamentoService serv;
 
         public LancamentoController(ILancamentoService serv) : base(serv)
         {

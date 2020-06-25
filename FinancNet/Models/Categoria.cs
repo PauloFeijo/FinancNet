@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,5 +15,9 @@ namespace FinancNet.Models
         [Required]
         public string tipo { get; set; }
 
+        public long? paiId { get; set; }
+
+        [JsonIgnore]
+        public virtual Categoria pai { get; set; }
     }
 }
