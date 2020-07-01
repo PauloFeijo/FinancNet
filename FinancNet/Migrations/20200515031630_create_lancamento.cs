@@ -28,13 +28,13 @@ namespace FinancNet.Migrations
                         column: x => x.categoriaId,
                         principalTable: "categoria",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_lancamento_conta_contaId",
                         column: x => x.contaId,
                         principalTable: "conta",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

@@ -19,5 +19,8 @@ namespace FinancNet.Models
 
         [JsonIgnore]
         public virtual Categoria pai { get; set; }
+
+        [JsonIgnore]
+        public virtual List<Categoria> filhos { get; set; }
     }
 }
