@@ -8,7 +8,7 @@ namespace FinancNet.Services.Impl
     {
         private ILancamentoRepository repo;
         private IService<Categoria> servCateg;
-        private IService<Conta> servConta;
+        private ISaldoService servSaldo;
 
         private void SetTipo(Lancamento item)
         {
@@ -19,35 +19,19 @@ namespace FinancNet.Services.Impl
             }
         }
 
-        private void ProcessarSaldoConta(long contaId)
-        {
-            Conta conta = servConta.FindById(contaId);
-            if (conta == null)
-            {
-                return;
-            }
-
-            double receitas = repo.GetTotalReceitas(contaId);
-            double despesas = repo.GetTotalDespesas(contaId);
-
-            conta.saldo = receitas - despesas;
-
-            servConta.Update(conta);
-        }
-
-        public LancamentoService(ILancamentoRepository repo, IService<Categoria> servCateg, 
-            IService<Conta> servConta) : base(repo)
+        public LancamentoService(ILancamentoRepository repo, IService<Categoria> servCateg,
+            ISaldoService servSaldo) : base(repo)
         {
             this.repo = repo;
             this.servCateg = servCateg;
-            this.servConta = servConta;
+            this.servSaldo = servSaldo;
         }
 
         public override Lancamento Create(Lancamento item)
         {
             SetTipo(item);
             Lancamento lanc = base.Create(item);
-            ProcessarSaldoConta(item.contaId);
+            servSaldo.ProcessarSaldoConta(item.contaId);
             return lanc;
         }
 
@@ -60,9 +44,9 @@ namespace FinancNet.Services.Impl
 
             if (item.contaId != oldContaId)
             {
-                ProcessarSaldoConta(oldContaId);
+                servSaldo.ProcessarSaldoConta(oldContaId);
             }
-            ProcessarSaldoConta(item.contaId);
+            servSaldo.ProcessarSaldoConta(item.contaId);
 
             return lanc;
         }
@@ -71,7 +55,7 @@ namespace FinancNet.Services.Impl
         {
             long contaId = FindById(id).contaId;
             base.Delete(id);
-            ProcessarSaldoConta(contaId);
+            servSaldo.ProcessarSaldoConta(contaId);
         }
     }
 }

@@ -18,5 +18,19 @@ namespace FinancNet.Repositories.Impl
                 .Include("contaCredito")
                 .ToList();
         }
+
+        public double GetTotalCreditos(long contaId)
+        {
+            return dataset
+                .Where(t => t.contaCreditoId == contaId)
+                .Sum(t => t.valor);
+        }
+
+        public double GetTotalDebitos(long contaId)
+        {
+            return dataset
+                .Where(t => t.contaDebitoId == contaId)
+                .Sum(t => t.valor);
+        }
     }
 }
