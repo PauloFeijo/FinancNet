@@ -3,7 +3,9 @@ using FinancNet.Repositories.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Query;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace FinancNet.Repositories.Impl
@@ -35,6 +37,26 @@ namespace FinancNet.Repositories.Impl
         public double GetTotalReceitas(long contaId)
         {
             return GetTotalReceitasDespesas(contaId, "RECEITA");
+        }
+
+        public List<Lancamento> FindByPeriodo(string dini, string dfin)
+        {
+            DateTime dataInicial;
+            DateTime dataFinal;
+
+            if (dini != "" && dfin != "" &&
+                DateTime.TryParseExact(dini, "dd-MM-yyyy", null, DateTimeStyles.None, out dataInicial) &&
+                DateTime.TryParseExact(dfin + " 23:59:59", "dd-MM-yyyy HH:mm:ss", null, DateTimeStyles.None, out dataFinal))
+            {
+                return dataset
+                    .Include("conta")
+                    .Include("categoria")
+                    .Where(l => l.data >= dataInicial && l.data <= dataFinal)
+                    .ToList();
+            } else
+            {
+                return FindAll();
+            }
         }
     }
 }

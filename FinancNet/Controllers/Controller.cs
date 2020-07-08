@@ -16,7 +16,7 @@ namespace FinancNet.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public virtual IActionResult Get()
         {
             return Ok(serv.FindAll());
         }

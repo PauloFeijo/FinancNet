@@ -7,5 +7,6 @@ namespace FinancNet.Repositories
     {
         double GetTotalReceitas(long contaId);
         double GetTotalDespesas(long contaId);
+        List<Lancamento> FindByPeriodo(string dini, string dfin);
     }
 }

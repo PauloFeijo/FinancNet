@@ -1,6 +1,7 @@
 ﻿using FinancNet.Models;
 using FinancNet.Repositories;
 using System;
+using System.Collections.Generic;
 
 namespace FinancNet.Services.Impl
 {
@@ -56,6 +57,11 @@ namespace FinancNet.Services.Impl
             long contaId = FindById(id).contaId;
             base.Delete(id);
             servSaldo.ProcessarSaldoConta(contaId);
+        }
+
+        public List<Lancamento> FindByPeriodo(string dini, string dfin)
+        {
+            return repo.FindByPeriodo(dini, dfin);
         }
     }
 }
