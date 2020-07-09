@@ -1,6 +1,7 @@
 ﻿using FinancNet.Models;
 using FinancNet.Repositories;
 using System;
+using System.Collections.Generic;
 
 namespace FinancNet.Services.Impl
 {
@@ -68,6 +69,11 @@ namespace FinancNet.Services.Impl
 
             servSaldo.ProcessarSaldoConta(contaDebitoId);
             servSaldo.ProcessarSaldoConta(contaCreditoId);
+        }
+
+        public List<Transferencia> FindByPeriodo(string dini, string dfin)
+        {
+            return repo.FindByPeriodo(dini, dfin);
         }
     }
 }

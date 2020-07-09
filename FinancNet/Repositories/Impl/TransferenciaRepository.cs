@@ -1,7 +1,9 @@
 ﻿using FinancNet.Models;
 using FinancNet.Repositories.Context;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace FinancNet.Repositories.Impl
@@ -31,6 +33,27 @@ namespace FinancNet.Repositories.Impl
             return dataset
                 .Where(t => t.contaDebitoId == contaId)
                 .Sum(t => t.valor);
+        }
+
+        public List<Transferencia> FindByPeriodo(string dini, string dfin)
+        {
+            DateTime dataInicial;
+            DateTime dataFinal;
+
+            if (dini != "" && dfin != "" &&
+                DateTime.TryParseExact(dini, "dd-MM-yyyy", null, DateTimeStyles.None, out dataInicial) &&
+                DateTime.TryParseExact(dfin + " 23:59:59", "dd-MM-yyyy HH:mm:ss", null, DateTimeStyles.None, out dataFinal))
+            {
+                return dataset
+                    .Include("contaDebito")
+                    .Include("contaCredito")
+                    .Where(t => t.data >= dataInicial && t.data <= dataFinal)
+                    .ToList();
+            }
+            else
+            {
+                return FindAll();
+            }
         }
     }
 }

@@ -14,5 +14,13 @@ namespace FinancNet.Controllers
         {
             this.serv = serv;
         }
+
+        [HttpGet()]
+        public override IActionResult Get()
+        {
+            string dini = HttpContext.Request.Query["dini"].ToString();
+            string dfin = HttpContext.Request.Query["dfin"].ToString();
+            return Ok(serv.FindByPeriodo(dini, dfin));
+        }
     }
 }

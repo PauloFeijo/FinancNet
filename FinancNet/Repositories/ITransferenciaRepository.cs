@@ -7,5 +7,6 @@ namespace FinancNet.Repositories
     {
         double GetTotalDebitos(long contaId);
         double GetTotalCreditos(long contaId);
+        List<Transferencia> FindByPeriodo(string dini, string dfin);
     }
 }
