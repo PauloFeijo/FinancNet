@@ -16,5 +16,6 @@ namespace FinancNet.Repositories.Context
         public DbSet<Categoria> categoria { get; set; }
         public DbSet<Lancamento> lancamento { get; set; }
         public DbSet<Transferencia> transferencia { get; set; }
+        public DbSet<Usuario> usuario { get; set; }
     }
 }

@@ -42,6 +42,9 @@ namespace FinancNet
             services.AddScoped<ITransferenciaRepository, TransferenciaRepository>();
 
             services.AddScoped<ISaldoService, SaldoService>();
+
+            services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
