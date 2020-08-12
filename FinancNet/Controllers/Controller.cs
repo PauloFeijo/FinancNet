@@ -1,11 +1,13 @@
 ﻿using FinancNet.Models;
 using FinancNet.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancNet.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize("Bearer")]
     public class Controller<T> : ControllerBase where T : Entity
     {
         private IService<T> serv;
