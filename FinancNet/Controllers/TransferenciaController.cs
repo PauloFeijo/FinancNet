@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FinancNet.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
     public class TransferenciaController : Controller<Transferencia>
     {
         private ITransferenciaService serv;
