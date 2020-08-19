@@ -22,6 +22,7 @@ namespace FinancNet.Repositories.Impl
         {
             try
             {
+                item.usuario = Usuario.logado;
                 dataset.Add(item);
                 ctx.SaveChanges();
                 return item;
@@ -39,6 +40,8 @@ namespace FinancNet.Repositories.Impl
                 T itemDb = FindById(id);
                 if (itemDb == null) return;
 
+                if (itemDb.usuario != Usuario.logado) return;
+
                 dataset.Remove(itemDb);
                 ctx.SaveChanges();
             }
@@ -50,12 +53,16 @@ namespace FinancNet.Repositories.Impl
 
         public virtual List<T> FindAll()
         {
-            return dataset.ToList();
+            return dataset
+                .Where(t => t.usuario.Equals(Usuario.logado))
+                .ToList();
         }
 
         public T FindById(long id)
         {
-            return dataset.SingleOrDefault(p => p.id.Equals(id));
+            return dataset.SingleOrDefault(
+                p => p.id.Equals(id) && 
+                p.usuario.Equals(Usuario.logado));
         }
 
         public T Update(T item)
@@ -66,6 +73,9 @@ namespace FinancNet.Repositories.Impl
                 if (itemDb == null) return null;
 
                 ctx.Entry(itemDb).CurrentValues.SetValues(item);
+
+                itemDb.usuario = Usuario.logado;
+
                 ctx.SaveChanges();
                 return itemDb;
             }

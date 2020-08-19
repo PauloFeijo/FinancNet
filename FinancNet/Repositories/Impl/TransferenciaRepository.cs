@@ -18,6 +18,7 @@ namespace FinancNet.Repositories.Impl
             return dataset
                 .Include("contaDebito")
                 .Include("contaCredito")
+                .Where(t => t.usuario.Equals(Usuario.logado))
                 .ToList();
         }
 
@@ -47,7 +48,11 @@ namespace FinancNet.Repositories.Impl
                 return dataset
                     .Include("contaDebito")
                     .Include("contaCredito")
-                    .Where(t => t.data >= dataInicial && t.data <= dataFinal)
+                    .Where(t => 
+                        t.usuario.Equals(Usuario.logado) &&
+                        t.data >= dataInicial && 
+                        t.data <= dataFinal
+                     )
                     .ToList();
             }
             else
