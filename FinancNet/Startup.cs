@@ -1,4 +1,4 @@
-﻿using FinancNet.Repositories;
+using FinancNet.Repositories;
 using FinancNet.Repositories.Context;
 using FinancNet.Repositories.Impl;
 using FinancNet.Security.Config;
@@ -8,11 +8,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using System;
 
 namespace FinancNet
@@ -29,6 +30,13 @@ namespace FinancNet
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinancNet", Version = "v1" });
+            });
+
             ConfigurarAcessoADados(services);
 
             ConfigurarAutenticacao(services);
@@ -80,8 +88,6 @@ namespace FinancNet
             // MySql
             services.AddDbContext<Contexto>(options => options.UseMySQL(Configuration["MySqlConnection:ConnectionString"]));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IService<>), typeof(Service<>));
 
@@ -98,15 +104,13 @@ namespace FinancNet
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FinancNet v1"));
             }
 
             app.UseCors(options => 
@@ -116,7 +120,15 @@ namespace FinancNet
             );
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using FinancNet.Models;
 using FinancNet.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FinancNet.Controllers
 {
