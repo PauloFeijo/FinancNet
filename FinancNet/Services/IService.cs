@@ -1,5 +1,6 @@
 ﻿using FinancNet.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FinancNet.Services
 {
@@ -8,7 +9,7 @@ namespace FinancNet.Services
         T Create(T item);
         T FindById(long id);
         T Update(T item);
-        List<T> FindAll();
+        IQueryable<T> FindAll();
         void Delete(long id);
     }
 }

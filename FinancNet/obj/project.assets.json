@@ -2487,11 +2487,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projetos\\FinancNet-backend-dotnet-5\\FinancNet\\FinancNet.csproj",
+      "projectUniqueName": "C:\\Projetos\\FinancNet-backend-dotnet\\FinancNet\\FinancNet.csproj",
       "projectName": "FinancNet",
-      "projectPath": "C:\\Projetos\\FinancNet-backend-dotnet-5\\FinancNet\\FinancNet.csproj",
+      "projectPath": "C:\\Projetos\\FinancNet-backend-dotnet\\FinancNet\\FinancNet.csproj",
       "packagesPath": "C:\\Users\\paulo\\.nuget\\packages\\",
-      "outputPath": "C:\\Projetos\\FinancNet-backend-dotnet-5\\FinancNet\\obj\\",
+      "outputPath": "C:\\Projetos\\FinancNet-backend-dotnet\\FinancNet\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

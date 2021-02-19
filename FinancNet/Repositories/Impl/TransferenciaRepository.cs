@@ -13,30 +13,29 @@ namespace FinancNet.Repositories.Impl
         public TransferenciaRepository(Contexto ctx) : base(ctx) {}
 
 
-        public override List<Transferencia> FindAll()
+        public override IQueryable<Transferencia> FindAll()
         {
-            return dataset
+            return dbset
                 .Include("contaDebito")
                 .Include("contaCredito")
-                .Where(t => t.usuario.Equals(Usuario.logado))
-                .ToList();
+                .Where(t => t.usuario.Equals(Usuario.logado));
         }
 
         public double GetTotalCreditos(long contaId)
         {
-            return dataset
+            return dbset
                 .Where(t => t.contaCreditoId == contaId)
                 .Sum(t => t.valor);
         }
 
         public double GetTotalDebitos(long contaId)
         {
-            return dataset
+            return dbset
                 .Where(t => t.contaDebitoId == contaId)
                 .Sum(t => t.valor);
         }
 
-        public List<Transferencia> FindByPeriodo(string dini, string dfin)
+        public IQueryable<Transferencia> FindByPeriodo(string dini, string dfin)
         {
             DateTime dataInicial;
             DateTime dataFinal;
@@ -45,15 +44,14 @@ namespace FinancNet.Repositories.Impl
                 DateTime.TryParseExact(dini, "dd-MM-yyyy", null, DateTimeStyles.None, out dataInicial) &&
                 DateTime.TryParseExact(dfin + " 23:59:59", "dd-MM-yyyy HH:mm:ss", null, DateTimeStyles.None, out dataFinal))
             {
-                return dataset
+                return dbset
                     .Include("contaDebito")
                     .Include("contaCredito")
                     .Where(t => 
                         t.usuario.Equals(Usuario.logado) &&
                         t.data >= dataInicial && 
                         t.data <= dataFinal
-                     )
-                    .ToList();
+                     );
             }
             else
             {

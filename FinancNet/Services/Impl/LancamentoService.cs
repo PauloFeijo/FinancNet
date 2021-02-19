@@ -2,6 +2,7 @@
 using FinancNet.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FinancNet.Services.Impl
 {
@@ -59,7 +60,7 @@ namespace FinancNet.Services.Impl
             servSaldo.ProcessarSaldoConta(contaId);
         }
 
-        public List<Lancamento> FindByPeriodo(string dini, string dfin)
+        public IQueryable<Lancamento> FindByPeriodo(string dini, string dfin)
         {
             return repo.FindByPeriodo(dini, dfin);
         }

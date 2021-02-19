@@ -1,6 +1,7 @@
 ﻿using FinancNet.Models;
 using FinancNet.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FinancNet.Services.Impl
 {
@@ -24,9 +25,10 @@ namespace FinancNet.Services.Impl
             repo.Delete(id);
         }
 
-        public List<T> FindAll()
+        public IQueryable<T> FindAll()
         {
-            return repo.FindAll();
+            return repo.FindAll()
+                .Where(t => t.usuario.Equals(Usuario.logado));
         }
 
         public T FindById(long id)

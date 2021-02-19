@@ -16,18 +16,17 @@ namespace FinancNet.Repositories.Impl
 
         private double GetTotalReceitasDespesas(long contaId, string tipo)
         {
-            return dataset
+            return dbset
                 .Where(l => l.contaId == contaId && l.tipo.ToUpper() == tipo)
                 .Sum(l => l.valor);
         }
 
-        public override List<Lancamento> FindAll()
+        public override IQueryable<Lancamento> FindAll()
         {
-            return dataset
+            return dbset
                 .Include("conta")
                 .Include("categoria")
-                .Where(l => l.usuario.Equals(Usuario.logado))
-                .ToList();
+                .Where(l => l.usuario.Equals(Usuario.logado));
         }
 
         public double GetTotalDespesas(long contaId)
@@ -40,7 +39,7 @@ namespace FinancNet.Repositories.Impl
             return GetTotalReceitasDespesas(contaId, "RECEITA");
         }
 
-        public List<Lancamento> FindByPeriodo(string dini, string dfin)
+        public IQueryable<Lancamento> FindByPeriodo(string dini, string dfin)
         {
             DateTime dataInicial;
             DateTime dataFinal;
@@ -49,15 +48,14 @@ namespace FinancNet.Repositories.Impl
                 DateTime.TryParseExact(dini, "dd-MM-yyyy", null, DateTimeStyles.None, out dataInicial) &&
                 DateTime.TryParseExact(dfin + " 23:59:59", "dd-MM-yyyy HH:mm:ss", null, DateTimeStyles.None, out dataFinal))
             {
-                return dataset
+                return dbset
                     .Include("conta")
                     .Include("categoria")
                     .Where(l => 
                         l.usuario.Equals(Usuario.logado) && 
                         l.data >= dataInicial && 
                         l.data <= dataFinal
-                     )
-                    .ToList();
+                     );
             } else
             {
                 return FindAll();

@@ -1,5 +1,6 @@
 ﻿using FinancNet.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FinancNet.Repositories
 {
@@ -7,6 +8,6 @@ namespace FinancNet.Repositories
     {
         double GetTotalDebitos(long contaId);
         double GetTotalCreditos(long contaId);
-        List<Transferencia> FindByPeriodo(string dini, string dfin);
+        IQueryable<Transferencia> FindByPeriodo(string dini, string dfin);
     }
 }
