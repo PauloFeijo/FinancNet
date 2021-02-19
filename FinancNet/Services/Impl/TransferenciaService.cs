@@ -1,55 +1,54 @@
 ﻿using FinancNet.Models;
 using FinancNet.Repositories;
-using System;
-using System.Collections.Generic;
+using FinancNet.Services.Base.Impl;
 using System.Linq;
 
 namespace FinancNet.Services.Impl
 {
-    public class TransferenciaService : Service<Transferencia>, ITransferenciaService
+    public class TransferenciaService : ServiceBase<Transferencia>, ITransferenciaService
     {
-        private ITransferenciaRepository repo;
-        private ISaldoService servSaldo;
+        private readonly ITransferenciaRepository _repo;
+        private readonly ISaldoService _servSaldo;
 
         public TransferenciaService(ITransferenciaRepository repo, ISaldoService servSaldo) : base(repo)
         {
-            this.repo = repo;
-            this.servSaldo = servSaldo;
+            _repo = repo;
+            _servSaldo = servSaldo;
         }
 
         public override Transferencia Create(Transferencia item)
         {
             Transferencia transf = base.Create(item);
-            servSaldo.ProcessarSaldoConta(item.contaDebitoId);
-            servSaldo.ProcessarSaldoConta(item.contaCreditoId);
+            _servSaldo.ProcessarSaldoConta(item.ContaDebitoId);
+            _servSaldo.ProcessarSaldoConta(item.ContaCreditoId);
             return transf;
         }
 
         public override Transferencia Update(Transferencia item)
         {
-            Transferencia transf = FindById(item.id);
+            Transferencia transf = FindById(item.Id);
 
             if (transf == null)
             {
                 return null;
             }
 
-            long oldContaDebitoId = transf.contaDebitoId;
-            long oldContaCreditoId = transf.contaCreditoId;
+            long oldContaDebitoId = transf.ContaDebitoId;
+            long oldContaCreditoId = transf.ContaCreditoId;
 
             transf = base.Update(item);
 
-            if (item.contaDebitoId != oldContaDebitoId)
+            if (item.ContaDebitoId != oldContaDebitoId)
             {
-                servSaldo.ProcessarSaldoConta(oldContaDebitoId);
+                _servSaldo.ProcessarSaldoConta(oldContaDebitoId);
             }
-            servSaldo.ProcessarSaldoConta(item.contaDebitoId);
+            _servSaldo.ProcessarSaldoConta(item.ContaDebitoId);
 
-            if (item.contaCreditoId != oldContaCreditoId)
+            if (item.ContaCreditoId != oldContaCreditoId)
             {
-                servSaldo.ProcessarSaldoConta(oldContaCreditoId);
+                _servSaldo.ProcessarSaldoConta(oldContaCreditoId);
             }
-            servSaldo.ProcessarSaldoConta(item.contaCreditoId);
+            _servSaldo.ProcessarSaldoConta(item.ContaCreditoId);
 
             return transf;
         }
@@ -63,18 +62,18 @@ namespace FinancNet.Services.Impl
                 return;
             }
 
-            long contaDebitoId = transf.contaDebitoId;
-            long contaCreditoId = transf.contaCreditoId;
+            long contaDebitoId = transf.ContaDebitoId;
+            long contaCreditoId = transf.ContaCreditoId;
 
             base.Delete(id);
 
-            servSaldo.ProcessarSaldoConta(contaDebitoId);
-            servSaldo.ProcessarSaldoConta(contaCreditoId);
+            _servSaldo.ProcessarSaldoConta(contaDebitoId);
+            _servSaldo.ProcessarSaldoConta(contaCreditoId);
         }
 
         public IQueryable<Transferencia> FindByPeriodo(string dini, string dfin)
         {
-            return repo.FindByPeriodo(dini, dfin);
+            return _repo.FindByPeriodo(dini, dfin);
         }
     }
 }

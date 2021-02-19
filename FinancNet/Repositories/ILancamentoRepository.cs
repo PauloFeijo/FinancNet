@@ -1,10 +1,10 @@
 ﻿using FinancNet.Models;
-using System.Collections.Generic;
+using FinancNet.Repositories.Base;
 using System.Linq;
 
 namespace FinancNet.Repositories
 {
-    public interface ILancamentoRepository : IRepository<Lancamento>
+    public interface ILancamentoRepository : IRepositoryBase<Lancamento>
     {
         double GetTotalReceitas(long contaId);
         double GetTotalDespesas(long contaId);

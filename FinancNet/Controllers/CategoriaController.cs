@@ -3,8 +3,8 @@ using FinancNet.Services;
 
 namespace FinancNet.Controllers
 {
-    public class CategoriaController : Controller<Categoria>
+    public class CategoriaController : FinancControllerBase<Categoria>
     {
-        public CategoriaController(IService<Categoria> serv) : base(serv) { }
+        public CategoriaController(IServiceBase<Categoria> serv) : base(serv) { }
     }
 }

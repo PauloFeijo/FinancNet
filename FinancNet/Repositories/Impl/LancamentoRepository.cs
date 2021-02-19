@@ -1,43 +1,31 @@
 ﻿using FinancNet.Models;
+using FinancNet.Repositories.Base.Impl;
 using FinancNet.Repositories.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Query;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
 namespace FinancNet.Repositories.Impl
 {
-    public class LancamentoRepository : Repository<Lancamento>, ILancamentoRepository
+    public class LancamentoRepository : RepositoryBase<Lancamento>, ILancamentoRepository
     {
-        public LancamentoRepository(Contexto ctx) : base(ctx) {}
+        public LancamentoRepository(Contexto ctx) : base(ctx) { }
 
-        private double GetTotalReceitasDespesas(long contaId, string tipo)
-        {
-            return dbset
-                .Where(l => l.contaId == contaId && l.tipo.ToUpper() == tipo)
-                .Sum(l => l.valor);
-        }
+        private double GetTotalReceitasDespesas(long contaId, string tipo) => 
+            _dbset
+            .Where(l => l.ContaId == contaId && l.Tipo.ToUpper() == tipo)
+            .Sum(l => l.Valor);
 
-        public override IQueryable<Lancamento> FindAll()
-        {
-            return dbset
-                .Include("conta")
-                .Include("categoria")
-                .Where(l => l.usuario.Equals(Usuario.logado));
-        }
+        public override IQueryable<Lancamento> FindAll() => 
+            _dbset
+            .Include("conta")
+            .Include("categoria")
+            .Where(l => l.Usuario.Equals(Usuario.Logado));
 
-        public double GetTotalDespesas(long contaId)
-        {
-            return GetTotalReceitasDespesas(contaId, "DESPESA");
-        }
+        public double GetTotalDespesas(long contaId) => GetTotalReceitasDespesas(contaId, "DESPESA");
 
-        public double GetTotalReceitas(long contaId)
-        {
-            return GetTotalReceitasDespesas(contaId, "RECEITA");
-        }
+        public double GetTotalReceitas(long contaId) => GetTotalReceitasDespesas(contaId, "RECEITA");
 
         public IQueryable<Lancamento> FindByPeriodo(string dini, string dfin)
         {
@@ -48,13 +36,13 @@ namespace FinancNet.Repositories.Impl
                 DateTime.TryParseExact(dini, "dd-MM-yyyy", null, DateTimeStyles.None, out dataInicial) &&
                 DateTime.TryParseExact(dfin + " 23:59:59", "dd-MM-yyyy HH:mm:ss", null, DateTimeStyles.None, out dataFinal))
             {
-                return dbset
+                return _dbset
                     .Include("conta")
                     .Include("categoria")
                     .Where(l => 
-                        l.usuario.Equals(Usuario.logado) && 
-                        l.data >= dataInicial && 
-                        l.data <= dataFinal
+                        l.Usuario.Equals(Usuario.Logado) && 
+                        l.Data >= dataInicial && 
+                        l.Data <= dataFinal
                      );
             } else
             {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FinancNet.Controllers
 {
-    public class LancamentoController : Controller<Lancamento>
+    public class LancamentoController : FinancControllerBase<Lancamento>
     {
         private ILancamentoService serv;
 

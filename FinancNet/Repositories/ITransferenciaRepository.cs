@@ -1,10 +1,10 @@
 ﻿using FinancNet.Models;
-using System.Collections.Generic;
+using FinancNet.Repositories.Base;
 using System.Linq;
 
 namespace FinancNet.Repositories
 {
-    public interface ITransferenciaRepository : IRepository<Transferencia>
+    public interface ITransferenciaRepository : IRepositoryBase<Transferencia>
     {
         double GetTotalDebitos(long contaId);
         double GetTotalCreditos(long contaId);

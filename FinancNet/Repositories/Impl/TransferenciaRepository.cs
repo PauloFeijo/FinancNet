@@ -1,39 +1,29 @@
 ﻿using FinancNet.Models;
+using FinancNet.Repositories.Base.Impl;
 using FinancNet.Repositories.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
 namespace FinancNet.Repositories.Impl
 {
-    public class TransferenciaRepository : Repository<Transferencia>, ITransferenciaRepository
+    public class TransferenciaRepository : RepositoryBase<Transferencia>, ITransferenciaRepository
     {
-        public TransferenciaRepository(Contexto ctx) : base(ctx) {}
+        public TransferenciaRepository(Contexto ctx) : base(ctx) { }
 
+        public override IQueryable<Transferencia> FindAll() => _dbset
+            .Include("contaDebito")
+            .Include("contaCredito")
+            .Where(t => t.Usuario.Equals(Usuario.Logado));
 
-        public override IQueryable<Transferencia> FindAll()
-        {
-            return dbset
-                .Include("contaDebito")
-                .Include("contaCredito")
-                .Where(t => t.usuario.Equals(Usuario.logado));
-        }
+        public double GetTotalCreditos(long contaId) => _dbset
+            .Where(t => t.ContaCreditoId == contaId)
+            .Sum(t => t.Valor);
 
-        public double GetTotalCreditos(long contaId)
-        {
-            return dbset
-                .Where(t => t.contaCreditoId == contaId)
-                .Sum(t => t.valor);
-        }
-
-        public double GetTotalDebitos(long contaId)
-        {
-            return dbset
-                .Where(t => t.contaDebitoId == contaId)
-                .Sum(t => t.valor);
-        }
+        public double GetTotalDebitos(long contaId) => _dbset
+            .Where(t => t.ContaDebitoId == contaId)
+            .Sum(t => t.Valor);
 
         public IQueryable<Transferencia> FindByPeriodo(string dini, string dfin)
         {
@@ -44,13 +34,13 @@ namespace FinancNet.Repositories.Impl
                 DateTime.TryParseExact(dini, "dd-MM-yyyy", null, DateTimeStyles.None, out dataInicial) &&
                 DateTime.TryParseExact(dfin + " 23:59:59", "dd-MM-yyyy HH:mm:ss", null, DateTimeStyles.None, out dataFinal))
             {
-                return dbset
+                return _dbset
                     .Include("contaDebito")
                     .Include("contaCredito")
                     .Where(t => 
-                        t.usuario.Equals(Usuario.logado) &&
-                        t.data >= dataInicial && 
-                        t.data <= dataFinal
+                        t.Usuario.Equals(Usuario.Logado) &&
+                        t.Data >= dataInicial && 
+                        t.Data <= dataFinal
                      );
             }
             else

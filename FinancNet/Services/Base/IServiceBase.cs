@@ -1,10 +1,9 @@
-﻿using FinancNet.Models;
-using System.Collections.Generic;
+﻿using FinancNet.Models.Base;
 using System.Linq;
 
-namespace FinancNet.Services
+namespace FinancNet.Services.Base
 {
-    public interface IService<T> where T : Entity
+    public interface IServiceBase<T> where T : EntityBase
     {
         T Create(T item);
         T FindById(long id);

@@ -1,21 +1,22 @@
-﻿using System;
+﻿using FinancNet.Models.Base;
+using System;
 
 namespace FinancNet.Models
 {
-    public class Lancamento : Entity
+    public class Lancamento : EntityBase
     {
-        public DateTime data { get; set; }
+        public DateTime Data { get; set; }
 
-        public string tipo { get; set; }
+        public string Tipo { get; set; }
 
-        public string descricao { get; set; }
+        public string Descricao { get; set; }
 
-        public double valor { get; set; }
+        public double Valor { get; set; }
 
-        public long contaId { get; set; }
-        public virtual Conta conta { get; set; }
+        public long ContaId { get; set; }
+        public virtual Conta Conta { get; set; }
 
-        public long categoriaId { get; set; }
-        public virtual Categoria categoria { get; set; }        
+        public long CategoriaId { get; set; }
+        public virtual Categoria Categoria { get; set; }        
     }
 }

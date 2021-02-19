@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FinancNet.Controllers
 {
-    public class TransferenciaController : Controller<Transferencia>
+    public class TransferenciaController : FinancControllerBase<Transferencia>
     {
         private ITransferenciaService serv;
 

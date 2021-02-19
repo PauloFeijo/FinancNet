@@ -1,5 +1,6 @@
 ﻿using FinancNet.Models;
-using FinancNet.Services;
+using FinancNet.Models.Base;
+using FinancNet.Services.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,19 +9,16 @@ namespace FinancNet.Controllers
     [Route("[controller]")]
     [ApiController]
     [Authorize("Bearer")]
-    public class Controller<T> : ControllerBase where T : Entity
+    public class FinancControllerBase<T> : ControllerBase where T : EntityBase
     {
-        private IService<T> serv;
+        private IServiceBase<T> serv;
 
-        public Controller(IService<T> serv)
+        public FinancControllerBase(IServiceBase<T> serv)
         {
             this.serv = serv;
-        }     
-
-        private void AtualizarUsuarioLogado()
-        {
-            Usuario.logado = User.Identity.Name;
         }
+
+        private void AtualizarUsuarioLogado() => Usuario.Logado = User.Identity.Name;
 
         [HttpGet]
         public virtual IActionResult Get()
@@ -58,7 +56,7 @@ namespace FinancNet.Controllers
 
             if (item == null) return BadRequest();
 
-            item.id = id;
+            item.Id = id;
 
             return new ObjectResult(serv.Update(item));
         }

@@ -1,68 +1,66 @@
 ﻿using FinancNet.Models;
 using FinancNet.Repositories;
-using System;
-using System.Collections.Generic;
+using FinancNet.Services.Base;
+using FinancNet.Services.Base.Impl;
 using System.Linq;
 
 namespace FinancNet.Services.Impl
 {
-    public class LancamentoService : Service<Lancamento>, ILancamentoService
+    public class LancamentoService : ServiceBase<Lancamento>, ILancamentoService
     {
-        private ILancamentoRepository repo;
-        private IService<Categoria> servCateg;
-        private ISaldoService servSaldo;
+        private readonly ILancamentoRepository _repo;
+        private readonly IServiceBase<Categoria> _servCateg;
+        private readonly ISaldoService _servSaldo;
 
-        private void SetTipo(Lancamento item)
-        {
-            Categoria cat = servCateg.FindById(item.categoriaId);
-            if (cat != null)
-            {
-                item.tipo = cat.tipo;
-            }
-        }
-
-        public LancamentoService(ILancamentoRepository repo, IService<Categoria> servCateg,
+        public LancamentoService(ILancamentoRepository repo, IServiceBase<Categoria> servCateg,
             ISaldoService servSaldo) : base(repo)
         {
-            this.repo = repo;
-            this.servCateg = servCateg;
-            this.servSaldo = servSaldo;
+            _repo = repo;
+            _servCateg = servCateg;
+            _servSaldo = servSaldo;
         }
 
         public override Lancamento Create(Lancamento item)
         {
             SetTipo(item);
             Lancamento lanc = base.Create(item);
-            servSaldo.ProcessarSaldoConta(item.contaId);
+            _servSaldo.ProcessarSaldoConta(item.ContaId);
             return lanc;
         }
 
         public override Lancamento Update(Lancamento item)
         {
-            long oldContaId = FindById(item.id).contaId;
+            long oldContaId = FindById(item.Id).ContaId;
 
             SetTipo(item);
             Lancamento lanc = base.Update(item);
 
-            if (item.contaId != oldContaId)
+            if (item.ContaId != oldContaId)
             {
-                servSaldo.ProcessarSaldoConta(oldContaId);
+                _servSaldo.ProcessarSaldoConta(oldContaId);
             }
-            servSaldo.ProcessarSaldoConta(item.contaId);
+            _servSaldo.ProcessarSaldoConta(item.ContaId);
 
             return lanc;
         }
 
         public override void Delete(long id)
         {
-            long contaId = FindById(id).contaId;
+            long contaId = FindById(id).ContaId;
             base.Delete(id);
-            servSaldo.ProcessarSaldoConta(contaId);
+            _servSaldo.ProcessarSaldoConta(contaId);
         }
 
-        public IQueryable<Lancamento> FindByPeriodo(string dini, string dfin)
+        public IQueryable<Lancamento> FindByPeriodo(string dini, string dfin) => 
+            _repo.FindByPeriodo(dini, dfin);
+
+        private void SetTipo(Lancamento item)
         {
-            return repo.FindByPeriodo(dini, dfin);
+            Categoria cat = _servCateg.FindById(item.CategoriaId);
+            if (cat != null)
+            {
+                item.Tipo = cat.Tipo;
+            }
         }
     }
 }

@@ -88,8 +88,8 @@ namespace FinancNet
             // MySql
             services.AddDbContext<Contexto>(options => options.UseMySQL(Configuration["MySqlConnection:ConnectionString"]));
 
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(IService<>), typeof(Service<>));
+            services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+            services.AddScoped(typeof(IServiceBase<>), typeof(ServiceBase<>));
 
             services.AddScoped<ILancamentoService, LancamentoService>();
             services.AddScoped<ILancamentoRepository, LancamentoRepository>();

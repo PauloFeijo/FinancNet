@@ -3,8 +3,8 @@ using FinancNet.Services;
 
 namespace FinancNet.Controllers
 {
-    public class ContaController : Controller<Conta>
+    public class ContaController : FinancControllerBase<Conta>
     {
-        public ContaController(IService<Conta> serv) : base(serv) { }
+        public ContaController(IServiceBase<Conta> serv) : base(serv) { }
     }
 }

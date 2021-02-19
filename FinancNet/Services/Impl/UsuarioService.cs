@@ -10,21 +10,21 @@ namespace FinancNet.Services.Impl
 {
     public class UsuarioService : IUsuarioService
     {
-        private IUsuarioRepository repo;
-        private SigningConfigurations signConfig;
-        private TokenConfiguration tokenConfig;
+        private readonly IUsuarioRepository _repo;
+        private readonly SigningConfigurations _signConfig;
+        private readonly TokenConfiguration _tokenConfig;
 
         public UsuarioService(IUsuarioRepository repo, SigningConfigurations signConfig,
             TokenConfiguration tokenConfig)
         {
-            this.repo = repo;   
-            this.signConfig = signConfig;
-            this.tokenConfig = tokenConfig;
+            _repo = repo;   
+            _signConfig = signConfig;
+            _tokenConfig = tokenConfig;
         }
 
         public object Create(Usuario usuario)
         {
-            repo.Create(usuario);
+            _repo.Create(usuario);
             return FindByLogin(usuario);
         }
 
@@ -32,27 +32,27 @@ namespace FinancNet.Services.Impl
         {
             bool autorizado = false;
 
-            if (usuario == null || string.IsNullOrWhiteSpace(usuario.login)) return null;
+            if (usuario == null || string.IsNullOrWhiteSpace(usuario.Login)) return null;
 
-            var usuarioBase = repo.FindByLogin(usuario.login);
+            var usuarioBase = _repo.FindByLogin(usuario.Login);
 
-            autorizado = usuarioBase != null && usuarioBase.login == usuario.login && 
-                usuarioBase.senha == usuario.senha;
+            autorizado = usuarioBase != null && usuarioBase.Login == usuario.Login && 
+                usuarioBase.Senha == usuario.Senha;
 
             if (!autorizado) return NaoAutorizado();
 
             ClaimsIdentity identity = new ClaimsIdentity(
 
-                new System.Security.Principal.GenericIdentity(usuario.login, "Login"),
+                new System.Security.Principal.GenericIdentity(usuario.Login, "Login"),
                 new[]
                 {
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                    new Claim(JwtRegisteredClaimNames.UniqueName, usuario.login)
+                    new Claim(JwtRegisteredClaimNames.UniqueName, usuario.Login)
                 }
             );
 
             DateTime dataCriacao = DateTime.Now;
-            DateTime dataExpiracao = dataCriacao + TimeSpan.FromSeconds(tokenConfig.Seconds);
+            DateTime dataExpiracao = dataCriacao + TimeSpan.FromSeconds(_tokenConfig.Seconds);
 
             string token = CriarToken(identity, dataCriacao, dataExpiracao, new JwtSecurityTokenHandler());
 
@@ -63,9 +63,9 @@ namespace FinancNet.Services.Impl
         {
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {
-                Issuer = tokenConfig.Issuer,
-                Audience = tokenConfig.Audience,
-                SigningCredentials = signConfig.Credentials,
+                Issuer = _tokenConfig.Issuer,
+                Audience = _tokenConfig.Audience,
+                SigningCredentials = _signConfig.Credentials,
                 Subject = identity,
                 NotBefore = dataCriacao,
                 Expires = dataExpiracao

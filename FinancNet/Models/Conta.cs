@@ -1,16 +1,17 @@
-﻿using System;
+﻿using FinancNet.Models.Base;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace FinancNet.Models
 {
-    public class Conta : Entity
+    public class Conta : EntityBase
     {
         [Required]
-        public String descricao { get; set; }
+        public string Descricao { get; set; }
 
-        public String numero { get; set; }
+        public string Numero { get; set; }
 
         [Required]
-        public Double saldo { get; set; }
+        public double Saldo { get; set; }
     }
 }

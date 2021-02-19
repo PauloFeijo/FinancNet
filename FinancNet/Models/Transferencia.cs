@@ -1,17 +1,18 @@
-﻿using System;
+﻿using FinancNet.Models.Base;
+using System;
 
 namespace FinancNet.Models
 {
-    public class Transferencia : Entity
+    public class Transferencia : EntityBase
     {
-        public long contaDebitoId { get; set; }
-        public virtual Conta contaDebito { get; set; }
+        public long ContaDebitoId { get; set; }
+        public virtual Conta ContaDebito { get; set; }
 
-        public long contaCreditoId { get; set; }
-        public virtual Conta contaCredito { get; set; }
+        public long ContaCreditoId { get; set; }
+        public virtual Conta ContaCredito { get; set; }
 
-        public DateTime data { get; set; }
+        public DateTime Data { get; set; }
 
-        public double valor { get; set; }
+        public double Valor { get; set; }
     }
 }

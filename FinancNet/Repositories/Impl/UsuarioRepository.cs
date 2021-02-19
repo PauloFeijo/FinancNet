@@ -1,36 +1,26 @@
 ﻿using FinancNet.Models;
 using FinancNet.Repositories.Context;
-using System;
 using System.Linq;
 
 namespace FinancNet.Repositories.Impl
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        protected Contexto ctx;
+        private readonly Contexto _ctx;
 
         public UsuarioRepository(Contexto ctx)
         {
-            this.ctx = ctx;
+            this._ctx = ctx;
         }
 
         public Usuario Create(Usuario usuario)
         {
-            try
-            {
-                ctx.usuario.Add(usuario);
-                ctx.SaveChanges();
-                return usuario;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            _ctx.usuario.Add(usuario);
+            _ctx.SaveChanges();
+            return usuario;
         }
 
-        public Usuario FindByLogin(string login)
-        {
-            return ctx.usuario.SingleOrDefault(u => u.login.Equals(login));
-        }
+        public Usuario FindByLogin(string login) => 
+            _ctx.usuario.SingleOrDefault(u => u.Login.Equals(login));
     }
 }

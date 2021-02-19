@@ -1,10 +1,11 @@
 ﻿using FinancNet.Models;
+using FinancNet.Models.Base;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FinancNet.Repositories
+namespace FinancNet.Repositories.Base
 {
-    public interface IRepository<T> where T : Entity
+    public interface IRepositoryBase<T> where T : EntityBase
     {
         T Create(T item);
         T FindById(long id);
