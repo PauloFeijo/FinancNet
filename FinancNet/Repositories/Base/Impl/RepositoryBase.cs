@@ -19,31 +19,23 @@ namespace FinancNet.Repositories.Base.Impl
 
         public T Create(T item)
         {
-            item.Usuario = Usuario.Logado;
             _dbset.Add(item);
             _ctx.SaveChanges();
             return item;
         }
 
-        public void Delete(long id)
+        public void Delete(T item)
         {
-            T itemDb = FindById(id);
-            if (itemDb == null) return;
-
-            if (itemDb.Usuario != Usuario.Logado) return;
-
-            _dbset.Remove(itemDb);
+            _dbset.Remove(item);
             _ctx.SaveChanges();
         }
 
-        public virtual IQueryable<T> FindAll() => _dbset
-            .Where(t => t.Usuario.Equals(Usuario.Logado));
+        public virtual IQueryable<T> FindAll() => _dbset;
 
         public T FindById(long id)
         {
             return _dbset.SingleOrDefault(
-                p => p.Id.Equals(id) && 
-                p.Usuario.Equals(Usuario.Logado));
+                p => p.Id.Equals(id));
         }
 
         public T Update(T item)
@@ -52,8 +44,6 @@ namespace FinancNet.Repositories.Base.Impl
             if (itemDb == null) return null;
 
             _ctx.Entry(itemDb).CurrentValues.SetValues(item);
-
-            itemDb.Usuario = Usuario.Logado;
 
             _ctx.SaveChanges();
             return itemDb;

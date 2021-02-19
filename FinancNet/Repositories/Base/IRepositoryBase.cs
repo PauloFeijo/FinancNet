@@ -11,6 +11,6 @@ namespace FinancNet.Repositories.Base
         T FindById(long id);
         T Update(T item);
         IQueryable<T> FindAll();
-        void Delete(long id);
+        void Delete(T item);
     }
 }

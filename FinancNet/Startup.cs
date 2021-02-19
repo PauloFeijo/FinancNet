@@ -1,8 +1,13 @@
+using FinancNet.Models;
 using FinancNet.Repositories;
+using FinancNet.Repositories.Base;
+using FinancNet.Repositories.Base.Impl;
 using FinancNet.Repositories.Context;
 using FinancNet.Repositories.Impl;
 using FinancNet.Security.Config;
 using FinancNet.Services;
+using FinancNet.Services.Base;
+using FinancNet.Services.Base.Impl;
 using FinancNet.Services.Impl;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -124,6 +129,12 @@ namespace FinancNet
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.Use(async (context, next) =>
+            {
+                Usuario.Logado = context.User.Identity.Name;
+                await next.Invoke();
+            });
 
             app.UseEndpoints(endpoints =>
             {

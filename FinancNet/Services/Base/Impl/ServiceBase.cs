@@ -17,17 +17,38 @@ namespace FinancNet.Services.Base.Impl
         public virtual T Create(T item)
         {
             item.Id = 0;
+            item.Usuario = Usuario.Logado;
             return _repo.Create(item);
         }
 
-        public virtual void Delete(long id) => _repo.Delete(id);
+        public virtual void Delete(long id)
+        {
+            T item = _repo.FindById(id);
+
+            if (item == null) return;
+
+            if (item.Usuario != Usuario.Logado) return;
+
+            _repo.Delete(item);
+        }
 
         public IQueryable<T> FindAll() => 
             _repo.FindAll()
             .Where(t => t.Usuario.Equals(Usuario.Logado));
 
-        public T FindById(long id) => _repo.FindById(id);
+        public T FindById(long id)
+        {
+            var item = _repo.FindById(id);
 
-        public virtual T Update(T item) => _repo.Update(item);
+            if (item.Usuario != Usuario.Logado) return null;
+
+            return item;
+        }
+
+        public virtual T Update(T item)
+        {
+            item.Usuario = Usuario.Logado;
+            return _repo.Update(item);
+        }
     }
 }
