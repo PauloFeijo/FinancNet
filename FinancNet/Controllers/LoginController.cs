@@ -18,11 +18,11 @@ namespace FinancNet.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public object Post([FromBody]Usuario usuario)
+        public object Post([FromBody]LoginDTO login)
         {
-            if (usuario == null) return BadRequest();
+            if (login == null) return BadRequest();
 
-            return serv.FindByLogin(usuario);
+            return serv.FindByLogin(login);
         }
     }
 }

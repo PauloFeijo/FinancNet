@@ -5,6 +5,6 @@ namespace FinancNet.Services
     public interface IUsuarioService
     {
         object Create(Usuario usuario);
-        object FindByLogin(Usuario usuario);
+        object FindByLogin(LoginDTO login);
     }
 }

@@ -9,7 +9,6 @@ namespace FinancNet.Models
         [Required]
         public DateTime Data { get; set; }
 
-        [Required]
         [StringLength(10)]
         public string Tipo { get; set; }
 

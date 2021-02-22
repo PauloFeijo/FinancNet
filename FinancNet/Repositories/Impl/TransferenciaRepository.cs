@@ -13,8 +13,8 @@ namespace FinancNet.Repositories.Impl
         public TransferenciaRepository(Contexto ctx) : base(ctx) { }
 
         public override IQueryable<Transferencia> FindAll() => _dbset
-            .Include("contaDebito")
-            .Include("contaCredito")
+            .Include("ContaDebito")
+            .Include("ContaCredito")
             .Where(t => t.Usuario.Equals(Usuario.Logado));
 
         public double GetTotalCreditos(long contaId) => _dbset
@@ -35,8 +35,8 @@ namespace FinancNet.Repositories.Impl
                 DateTime.TryParseExact(dfin + " 23:59:59", "dd-MM-yyyy HH:mm:ss", null, DateTimeStyles.None, out dataFinal))
             {
                 return _dbset
-                    .Include("contaDebito")
-                    .Include("contaCredito")
+                    .Include("ContaDebito")
+                    .Include("ContaCredito")
                     .Where(t => 
                         t.Usuario.Equals(Usuario.Logado) &&
                         t.Data >= dataInicial && 

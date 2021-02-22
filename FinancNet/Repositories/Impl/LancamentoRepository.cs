@@ -19,8 +19,8 @@ namespace FinancNet.Repositories.Impl
 
         public override IQueryable<Lancamento> FindAll() => 
             _dbset
-            .Include("conta")
-            .Include("categoria")
+            .Include("Conta")
+            .Include("Categoria")
             .Where(l => l.Usuario.Equals(Usuario.Logado));
 
         public double GetTotalDespesas(long contaId) => GetTotalReceitasDespesas(contaId, "DESPESA");
@@ -37,8 +37,8 @@ namespace FinancNet.Repositories.Impl
                 DateTime.TryParseExact(dfin + " 23:59:59", "dd-MM-yyyy HH:mm:ss", null, DateTimeStyles.None, out dataFinal))
             {
                 return _dbset
-                    .Include("conta")
-                    .Include("categoria")
+                    .Include("Conta")
+                    .Include("Categoria")
                     .Where(l => 
                         l.Usuario.Equals(Usuario.Logado) && 
                         l.Data >= dataInicial && 

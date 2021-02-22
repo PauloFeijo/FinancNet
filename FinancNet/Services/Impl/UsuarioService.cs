@@ -25,29 +25,29 @@ namespace FinancNet.Services.Impl
         public object Create(Usuario usuario)
         {
             _repo.Create(usuario);
-            return FindByLogin(usuario);
+            return FindByLogin((LoginDTO) usuario);
         }
 
-        public object FindByLogin(Usuario usuario)
+        public object FindByLogin(LoginDTO login)
         {
             bool autorizado = false;
 
-            if (usuario == null || string.IsNullOrWhiteSpace(usuario.Login)) return null;
+            if (login == null || string.IsNullOrWhiteSpace(login.Login)) return null;
 
-            var usuarioBase = _repo.FindByLogin(usuario.Login);
+            var usuarioBase = _repo.FindByLogin(login.Login);
 
-            autorizado = usuarioBase != null && usuarioBase.Login == usuario.Login && 
-                usuarioBase.Senha == usuario.Senha;
+            autorizado = usuarioBase != null && usuarioBase.Login == login.Login && 
+                usuarioBase.Senha == login.Senha;
 
             if (!autorizado) return NaoAutorizado();
 
             ClaimsIdentity identity = new ClaimsIdentity(
 
-                new System.Security.Principal.GenericIdentity(usuario.Login, "Login"),
+                new System.Security.Principal.GenericIdentity(login.Login, "Login"),
                 new[]
                 {
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                    new Claim(JwtRegisteredClaimNames.UniqueName, usuario.Login)
+                    new Claim(JwtRegisteredClaimNames.UniqueName, login.Login)
                 }
             );
 
