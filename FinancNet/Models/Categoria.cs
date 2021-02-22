@@ -8,9 +8,11 @@ namespace FinancNet.Models
     public class Categoria : EntityBase
     {
         [Required]
+        [StringLength(100)]
         public string Descricao { get; set; }
 
         [Required]
+        [StringLength(10)]
         public string Tipo { get; set; }
 
         public long? PaiId { get; set; }

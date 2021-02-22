@@ -7,7 +7,7 @@ namespace FinancNet.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize("Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class FinancControllerBase<T> : ControllerBase where T : EntityBase
     {
         private IServiceBase<T> _serv;
