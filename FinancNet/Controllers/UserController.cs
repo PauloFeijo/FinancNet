@@ -1,4 +1,4 @@
-﻿using FinancNet.Dtos;
+﻿using FinancNet.Entities;
 using FinancNet.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,22 +7,22 @@ namespace FinancNet.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class UserController : ControllerBase
     {
         private IUserService serv;
 
-        public LoginController(IUserService serv)
+        public UserController(IUserService serv)
         {
             this.serv = serv;
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public object Post([FromBody] LoginDTO login)
+        public IActionResult Post([FromBody]User user)
         {
-            if (login == null) return BadRequest();
+            if (user == null) return BadRequest();
 
-            return serv.FindByLogin(login);
+            return new ObjectResult(serv.Create(user));
         }
     }
 }

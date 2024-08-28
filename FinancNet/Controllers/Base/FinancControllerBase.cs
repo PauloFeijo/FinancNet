@@ -1,5 +1,5 @@
-﻿using FinancNet.Models.Base;
-using FinancNet.Services.Base;
+﻿using FinancNet.Entities.Base;
+using FinancNet.Interfaces.Services.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
