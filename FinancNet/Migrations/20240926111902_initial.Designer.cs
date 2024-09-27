@@ -3,59 +3,69 @@ using System;
 using FinancNet.Repositories.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
+#nullable disable
 
 namespace FinancNet.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240827022909_migration")]
-    partial class migration
+    [Migration("20240926111902_initial")]
+    partial class initial
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            modelBuilder.Entity("FinancNet.Models.Account", b =>
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("FinancNet.Entities.Account", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<double>("Balance")
-                        .HasColumnType("double");
+                        .HasColumnType("float");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Number")
                         .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("User")
                         .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Account");
                 });
 
-            modelBuilder.Entity("FinancNet.Models.Category", b =>
+            modelBuilder.Entity("FinancNet.Entities.Category", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<long?>("ParentId")
                         .HasColumnType("bigint");
@@ -65,7 +75,7 @@ namespace FinancNet.Migrations
 
                     b.Property<string>("User")
                         .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 
@@ -74,11 +84,13 @@ namespace FinancNet.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("FinancNet.Models.Entry", b =>
+            modelBuilder.Entity("FinancNet.Entities.Entry", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("AccountId")
                         .HasColumnType("bigint");
@@ -87,22 +99,22 @@ namespace FinancNet.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<string>("User")
                         .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<double>("Value")
-                        .HasColumnType("double");
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -113,27 +125,29 @@ namespace FinancNet.Migrations
                     b.ToTable("Entry");
                 });
 
-            modelBuilder.Entity("FinancNet.Models.Transfer", b =>
+            modelBuilder.Entity("FinancNet.Entities.Transfer", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<long>("CreditAccountId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("DebitAccountId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("User")
                         .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<double>("Value")
-                        .HasColumnType("double");
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -144,45 +158,45 @@ namespace FinancNet.Migrations
                     b.ToTable("Transfer");
                 });
 
-            modelBuilder.Entity("FinancNet.Models.User", b =>
+            modelBuilder.Entity("FinancNet.Entities.User", b =>
                 {
                     b.Property<string>("Login")
                         .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Login");
 
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("FinancNet.Models.Category", b =>
+            modelBuilder.Entity("FinancNet.Entities.Category", b =>
                 {
-                    b.HasOne("FinancNet.Models.Category", "Parent")
+                    b.HasOne("FinancNet.Entities.Category", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
 
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("FinancNet.Models.Entry", b =>
+            modelBuilder.Entity("FinancNet.Entities.Entry", b =>
                 {
-                    b.HasOne("FinancNet.Models.Account", "Account")
+                    b.HasOne("FinancNet.Entities.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FinancNet.Models.Category", "Category")
+                    b.HasOne("FinancNet.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -193,15 +207,15 @@ namespace FinancNet.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("FinancNet.Models.Transfer", b =>
+            modelBuilder.Entity("FinancNet.Entities.Transfer", b =>
                 {
-                    b.HasOne("FinancNet.Models.Account", "CreditAccount")
+                    b.HasOne("FinancNet.Entities.Account", "CreditAccount")
                         .WithMany()
                         .HasForeignKey("CreditAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FinancNet.Models.Account", "DebitAccount")
+                    b.HasOne("FinancNet.Entities.Account", "DebitAccount")
                         .WithMany()
                         .HasForeignKey("DebitAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -212,7 +226,7 @@ namespace FinancNet.Migrations
                     b.Navigation("DebitAccount");
                 });
 
-            modelBuilder.Entity("FinancNet.Models.Category", b =>
+            modelBuilder.Entity("FinancNet.Entities.Category", b =>
                 {
                     b.Navigation("Children");
                 });

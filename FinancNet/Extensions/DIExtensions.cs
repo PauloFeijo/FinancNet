@@ -43,7 +43,10 @@ namespace FinancNet.Extensions
             //services.AddDbContext<Contexto>(options => options.UseNpgsql(configuration.GetConnectionString("PostgreSql")));
 
             // MySql
-            services.AddDbContext<Context>(options => options.UseMySQL(configuration.GetConnectionString("MySql")));
+            //services.AddDbContext<Context>(options => options.UseMySQL(configuration.GetConnectionString("MySql")));
+
+            // SqlServer
+            services.AddDbContext<Context>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServer")));
 
             return services;
         }

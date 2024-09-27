@@ -44,6 +44,7 @@ namespace FinancNet
             app.UseCors(options => options
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
+                .AllowAnyMethod()
             );
 
             app.UseHttpsRedirection();

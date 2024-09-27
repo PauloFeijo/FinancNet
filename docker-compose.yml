@@ -1,0 +1,7 @@
+services:
+  financnet:
+    image: ${DOCKER_REGISTRY-}financnet
+    container_name: 'FinancNet'
+    build:
+      context: .
+      dockerfile: FinancNet/Dockerfile

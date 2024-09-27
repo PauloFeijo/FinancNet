@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  financnet:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - "ConnectionStrings:MySql=Server=mysql;Database=financ;Uid=financ;Pwd=financ;ProcedureCacheSize=0;"
+      - "ConnectionStrings:SqlServer=Server=sqlserver,1433;Database=financ;User ID=sa;Password=Pass@word;Trusted_Connection=False; TrustServerCertificate=True;"
+    ports:
+      - "5000:80"
+      - "5001:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+networks:
+  default:
+    external: true
+    name: network

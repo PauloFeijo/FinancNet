@@ -1,11 +1,14 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-using MySql.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+
+#nullable disable
 
 namespace FinancNet.Migrations
 {
-    public partial class migration : Migration
+    /// <inheritdoc />
+    public partial class initial : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -13,11 +16,11 @@ namespace FinancNet.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    Number = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true),
-                    Balance = table.Column<double>(type: "double", nullable: false),
-                    User = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Number = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
+                    Balance = table.Column<double>(type: "float", nullable: false),
+                    User = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,11 +32,11 @@ namespace FinancNet.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     ParentId = table.Column<long>(type: "bigint", nullable: true),
-                    User = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true)
+                    User = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,17 +45,16 @@ namespace FinancNet.Migrations
                         name: "FK_Category_Category_ParentId",
                         column: x => x.ParentId,
                         principalTable: "Category",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
-                    Login = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false),
-                    Password = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Login = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,12 +66,12 @@ namespace FinancNet.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     DebitAccountId = table.Column<long>(type: "bigint", nullable: false),
                     CreditAccountId = table.Column<long>(type: "bigint", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Value = table.Column<double>(type: "double", nullable: false),
-                    User = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true)
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Value = table.Column<double>(type: "float", nullable: false),
+                    User = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -78,14 +80,14 @@ namespace FinancNet.Migrations
                         name: "FK_Transfer_Account_CreditAccountId",
                         column: x => x.CreditAccountId,
                         principalTable: "Account",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    //onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transfer_Account_DebitAccountId",
                         column: x => x.DebitAccountId,
                         principalTable: "Account",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    //onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,14 +95,14 @@ namespace FinancNet.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false),
-                    Value = table.Column<double>(type: "double", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Value = table.Column<double>(type: "float", nullable: false),
                     AccountId = table.Column<long>(type: "bigint", nullable: false),
                     CategoryId = table.Column<long>(type: "bigint", nullable: false),
-                    User = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true)
+                    User = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -145,6 +147,7 @@ namespace FinancNet.Migrations
                 column: "DebitAccountId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
