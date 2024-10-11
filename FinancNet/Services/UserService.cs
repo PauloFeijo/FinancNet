@@ -53,7 +53,7 @@ namespace FinancNet.Services
                 }
             );
 
-            DateTime creationDate = DateTime.Now;
+            DateTime creationDate = DateTime.UtcNow;
             DateTime expirationDate = creationDate + TimeSpan.FromSeconds(_tokenConfig.Seconds);
 
             string token = CreateToken(identity, creationDate, expirationDate, new JwtSecurityTokenHandler());
@@ -86,13 +86,13 @@ namespace FinancNet.Services
             };
         }
 
-        private object Authorized(DateTime dataCriacao, DateTime dataExpiracao, string token)
+        private object Authorized(DateTime createdDate, DateTime expirationDate, string token)
         {
             return new
             {
                 autenticated = true,
-                created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
-                expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
+                created = createdDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                expiration = expirationDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 accessToken = token,
                 message = "OK"
             };

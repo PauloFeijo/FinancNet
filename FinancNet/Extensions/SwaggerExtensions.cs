@@ -13,11 +13,6 @@ namespace FinancNet.Extensions
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinancNet", Version = "v1" });
 
-            var security = new Dictionary<string, IEnumerable<string>>
-            {
-                {"Bearer", new string[] { }},
-            };
-
             c.AddSecurityDefinition(
                 "Bearer",
                 new OpenApiSecurityScheme
