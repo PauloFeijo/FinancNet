@@ -1,0 +1,57 @@
+﻿﻿<EditForm Model="@Account" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <label form="description">Descrição: </label>
+            <div>
+                <InputText @bind-Value="Account.Description" class="form-control" />
+                <ValidationMessage For="@(()=> @Account.Description)" />
+            </div>
+            <label form="number">Número: </label>
+            <div>
+                <InputText @bind-Value="Account.Number" class="form-control" />
+                <ValidationMessage For="@(()=> @Account.Number)" />
+            </div>
+            <label form="balance">Saldo: @Account.Balance</label>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">
+        @ButtonTextSubmit
+    </button>
+
+    <button class="btn btn-danger mt-2"
+    @onclick="@(()=> navigation.NavigateTo("Account"))">
+        @ButtonTextCancel
+    </button>
+
+</EditForm>
+
+@code {
+    [Inject]
+    private NavigationManager? navigation { get; set; }
+
+    [Inject]
+    private IAccountService? _accountService { get; set; }
+
+    [Inject]
+    private IHttpClientFactory? http { get; set; }
+
+    [Parameter]
+    public AccountDto? Account { get; set; }
+
+    [Parameter]
+    public string ButtonTextSubmit { get; set; } = "Salvar";
+
+    [Parameter]
+    public string ButtonTextCancel { get; set; } = "Cancelar";
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+    }
+}

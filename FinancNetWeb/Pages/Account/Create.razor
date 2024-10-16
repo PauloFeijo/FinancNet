@@ -1,0 +1,29 @@
+﻿@page "/account/create"
+@inject IAccountService _accountService
+@inject NavigationManager navigation
+
+<h2>Nova Carteira</h2>
+
+<AccountForm 
+    Account="@account" 
+    OnValidSubmit="CreateAccount"
+    ButtonTextCancel="Cancelar"
+    ButtonTextSubmit="Salvar">
+</AccountForm>
+
+@code {
+    private AccountDto account = new AccountDto();
+
+    async Task CreateAccount()
+    {
+        try
+        {
+            await _accountService.Create(account);
+            navigation.NavigateTo("account");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+}

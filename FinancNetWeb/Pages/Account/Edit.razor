@@ -1,0 +1,37 @@
+﻿@page "/account/edit/{id:long}"
+@inject IAccountService _accountService
+@inject NavigationManager navigation
+
+<h2>Editar Carteira</h2>
+
+<AccountForm 
+    Account="@account" 
+    OnValidSubmit="EditAccount"
+    ButtonTextCancel="Cancelar"
+    ButtonTextSubmit="Salvar">
+</AccountForm>
+
+@code {
+    private AccountDto account = new AccountDto();
+
+    [Parameter]
+    public long Id { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        account = await _accountService.Get(Id);
+    }
+
+    async Task EditAccount()
+    {
+        try
+        {
+            await _accountService.Update(Id, account);
+            navigation.NavigateTo("account");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+}

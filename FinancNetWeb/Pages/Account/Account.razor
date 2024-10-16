@@ -1,0 +1,94 @@
+﻿@page "/account"
+@inject IAccountService _accountService
+@inject NavigationManager NavigationManager
+
+<h2>Carteiras</h2>
+
+<div>
+    <a class="btn btn-success" href="account/create">Nova Carteira</a>
+</div>
+<br />
+
+@if (accounts is not null)
+{
+    <table class="table table-striped">
+        <thead> 
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Número</th>
+                <th scope="col">Saldo</th>
+                <th scope="col"></th>
+            </tr></thead>
+        <tbody>
+            @foreach (var account in accounts)
+            {
+                <tr>
+                    <td>@account.Id</td>
+                    <td>@account.Description</td>
+                    <td>@account.Number</td>
+                    <td>@account.Balance</td>
+                    <td>
+                        <a class="btn btn-primary" href="account/edit/@account.Id">Editar</a> 
+                        <a class="btn btn-danger" @onclick="@(()=> Delete(account.Id))" style=" color : white">Excluir</a> 
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <DisplayMessage ErrorMessage="Não foi possível acessar carteiras !!!" />
+}
+<div>
+    <DisplayMessage ErrorMessage="@errorMessage" />
+</div>
+
+<ModalDialog @ref="modalDialog" onCancel="DeleteCancel" onConfirm="DeleteConfirm" Title="Exclusão">
+    <div>Deseja realmente excluir este item ?</div>
+</ModalDialog>
+
+@code {
+    private IEnumerable<AccountDto> accounts = new List<AccountDto>();
+
+    private string? errorMessage;
+
+    ModalDialog? modalDialog;
+    long accountId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await LoadAccounts();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            NavigationManager.NavigateTo("notauthorized");
+        }
+    }
+
+    async Task LoadAccounts()
+    {
+        accounts = await _accountService.GetAll();
+    }
+
+    void Delete(long id)
+    {
+        modalDialog.Show();
+        accountId = id;
+    }
+
+    void DeleteCancel()
+    {
+        modalDialog.Hide();
+    }
+
+    async Task DeleteConfirm()
+    {
+        await _accountService.Delete(accountId);
+        modalDialog.Hide();
+        await LoadAccounts();
+    }
+}
