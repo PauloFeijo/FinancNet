@@ -1,13 +1,9 @@
 ﻿using FinancNetWeb.Models.Dtos;
+using FinancNetWeb.Services.Api.Base;
 
 namespace FinancNetWeb.Services.Api
 {
-    public interface IAccountService
+    public interface IAccountService : IServiceBase<AccountDto>
     {
-        Task<List<AccountDto>> GetAll();
-        Task<AccountDto> Get(long id);
-        Task<AccountDto> Create(AccountDto accountDto);
-        Task<AccountDto> Update(long id, AccountDto accountDto);
-        Task<bool> Delete(long id);
     }
 }
