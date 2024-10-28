@@ -1,0 +1,29 @@
+﻿@page "/category/create"
+@inject ICategoryService _categoryService
+@inject NavigationManager navigation
+
+<h2>Nova Categoria</h2>
+
+<CategoryForm 
+    Category="@category" 
+    OnValidSubmit="CreateCategory"
+    ButtonTextCancel="Cancelar"
+    ButtonTextSubmit="Salvar">
+</CategoryForm>
+
+@code {
+    private CategoryDto category = new CategoryDto();
+
+    async Task CreateCategory()
+    {
+        try
+        {
+            await _categoryService.Create(category);
+            navigation.NavigateTo("category");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+}

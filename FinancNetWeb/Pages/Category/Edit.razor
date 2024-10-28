@@ -1,0 +1,37 @@
+﻿@page "/category/edit/{id:long}"
+@inject ICategoryService _categoryService
+@inject NavigationManager navigation
+
+<h2>Editar Categoria</h2>
+
+<CategoryForm 
+    Category="@category" 
+    OnValidSubmit="EditCategory"
+    ButtonTextCancel="Cancelar"
+    ButtonTextSubmit="Salvar">
+</CategoryForm>
+
+@code {
+    private CategoryDto category = new CategoryDto();
+
+    [Parameter]
+    public long Id { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        category = await _categoryService.Get(Id);
+    }
+
+    async Task EditCategory()
+    {
+        try
+        {
+            await _categoryService.Update(Id, category);
+            navigation.NavigateTo("category");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+}

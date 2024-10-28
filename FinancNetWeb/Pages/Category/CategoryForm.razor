@@ -1,0 +1,112 @@
+﻿﻿<EditForm Model="@Category" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group row">
+        <div class="col-sm-6">
+
+            <label form="description">Descrição: </label>
+            <div>
+                <InputText @bind-Value="Category.Description" class="form-control" />
+                <ValidationMessage For="@(()=> Category.Description)" />
+            </div>
+
+            <label form="type">Tipo: </label>
+            <InputSelect @bind-Value="Category.Type" class="form-control">
+                @foreach (var type in Enum.GetValues(typeof(EntryType)).Cast<EntryType>())
+                {
+                    <option value="@type">@type.GetDescription()</option>
+                }
+            </InputSelect>
+
+            <label form="parentId">Categoria Pai: </label>
+            <select @onchange="CategorySelectionChanged" class="form-control">
+                @if (categories != null)
+                {
+                    <option value="" selected="@(Category.ParentId == null)"></option>
+                    @foreach (var category in categories)
+                    {
+                        @if (category.Id == Category.Id) continue;
+
+                        <option value="@category.Id"
+                                selected="@(category.Id == Category.ParentId ? true : false)">
+                            @category.Description
+                        </option>
+                    }
+                }
+            </select>
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">
+        @ButtonTextSubmit
+    </button>
+
+    <button class="btn btn-danger mt-2"
+    @onclick="@(()=> navigation.NavigateTo("category"))">
+        @ButtonTextCancel
+    </button>
+
+</EditForm>
+
+@code {
+    List<CategoryDto>? categories;
+
+    [Inject]
+    private NavigationManager? navigation { get; set; }
+
+    [Inject]
+    private ICategoryService? _categoryService { get; set; }
+
+    [Inject]
+    private IHttpClientFactory? http { get; set; }
+
+    [Parameter]
+    public CategoryDto? Category { get; set; }
+
+    [Parameter]
+    public string ButtonTextSubmit { get; set; } = "Salvar";
+
+    [Parameter]
+    public string ButtonTextCancel { get; set; } = "Cancelar";
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadCategories();
+    }
+
+    private async Task<IEnumerable<CategoryDto>> LoadCategories()
+    {
+        categories = await _categoryService.GetAll();
+        return categories;
+    }
+
+    void CategorySelectionChanged(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == "")
+        {
+            Category.ParentId = null;
+            return;
+        }
+
+        if (!int.TryParse(e.Value.ToString(), out int id)) return;
+
+        if (id == Category.Id)
+        {
+            Category.ParentId = null;
+            return;
+        }
+
+        var category = categories.FirstOrDefault(x => x.Id == id);
+
+        if (category is null) return;
+
+        Category.ParentId = category.Id;
+        Category.Type = category.Type;
+        
+    }
+}

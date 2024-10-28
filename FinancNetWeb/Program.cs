@@ -21,6 +21,7 @@ builder.Services
     .AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>()
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<CustomHttpHandler>()
-    .AddScoped<IAccountService, AccountService>();
+    .AddScoped<IAccountService, AccountService>()
+    .AddScoped<ICategoryService, CategoryService>();
 
 await builder.Build().RunAsync();
