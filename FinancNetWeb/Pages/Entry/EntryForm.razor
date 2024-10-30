@@ -1,0 +1,157 @@
+﻿﻿<EditForm Model="@Entry" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group row">
+        <div class="col-sm-6">
+
+            <label form="date">Data: </label>
+            <div>
+                <InputDate @bind-Value="Entry.Date" class="form-control" />
+                <ValidationMessage For="@(()=> Entry.Date)" />
+            </div>
+
+            <label form="categoryId">Categoria: </label>
+            <select @onchange="CategorySelectionChanged" class="form-control">
+                @if (categories != null)
+                {
+                    <option value="" selected="@(Entry.CategoryId == null)"></option>
+                    @foreach (var category in categories)
+                    {
+                        <option value="@category.Id"
+                                selected="@(category.Id == Entry.CategoryId ? true : false)">
+                            @category.Description
+                        </option>
+                    }
+                }
+            </select>
+
+            <label form="accountId">Carteira: </label>
+            <select @onchange="AccountSelectionChanged" class="form-control">
+                @if (accounts != null)
+                {
+                    <option value="" selected="@(Entry.AccountId == null)"></option>
+                    @foreach (var account in accounts)
+                    {
+                        <option value="@account.Id"
+                                selected="@(account.Id == Entry.AccountId ? true : false)">
+                            @account.Description
+                        </option>
+                    }
+                }
+            </select>
+
+            <div>
+                <label form="type">Tipo: @Entry.Type.GetDescription()</label>
+            </div>
+
+            <label form="value">Valor: </label>
+            <div>
+                <InputNumber @bind-Value="Entry.Value" class="form-control" />
+                <ValidationMessage For="@(()=> Entry.Value)" />
+            </div>
+
+            <label form="description">Descrição: </label>
+            <div>
+                <InputText @bind-Value="Entry.Description" class="form-control" />
+                <ValidationMessage For="@(()=> Entry.Description)" />
+            </div>
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">
+        @ButtonTextSubmit
+    </button>
+
+    <button class="btn btn-danger mt-2"
+    @onclick="@(()=> navigation.NavigateTo("entry"))">
+        @ButtonTextCancel
+    </button>
+
+</EditForm>
+
+@code {
+    List<CategoryDto>? categories;
+    List<AccountDto>? accounts;
+
+    [Inject]
+    private NavigationManager? navigation { get; set; }
+
+    [Inject]
+    private IEntryService? _entryService { get; set; }
+
+    [Inject]
+    private ICategoryService? _categoryService { get; set; }
+
+    [Inject]
+    private IAccountService? _accountService { get; set; }
+
+    [Inject]
+    private IHttpClientFactory? http { get; set; }
+
+    [Parameter]
+    public EntryDto? Entry { get; set; }
+
+    [Parameter]
+    public string ButtonTextSubmit { get; set; } = "Salvar";
+
+    [Parameter]
+    public string ButtonTextCancel { get; set; } = "Cancelar";
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadCategories();
+        await LoadAccounts();
+    }
+
+    private async Task<IEnumerable<CategoryDto>> LoadCategories()
+    {
+        categories = await _categoryService.GetAll();
+        return categories;
+    }
+
+    private async Task<IEnumerable<AccountDto>> LoadAccounts()
+    {
+        accounts = await _accountService.GetAll();
+        return accounts;
+    }
+
+    void CategorySelectionChanged(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == "")
+        {
+            Entry.Category = null;
+            return;
+        }
+
+        if (!int.TryParse(e.Value.ToString(), out int id)) return;
+
+        var category = categories.FirstOrDefault(x => x.Id == id);
+
+        if (category is null) return;
+
+        Entry.CategoryId = category.Id;
+        Entry.Type = category.Type;
+    }
+
+    void AccountSelectionChanged(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == "")
+        {
+            Entry.Account = null;
+            return;
+        }
+
+        if (!int.TryParse(e.Value.ToString(), out int id)) return;
+
+        var account = accounts.FirstOrDefault(x => x.Id == id);
+
+        if (account is null) return;
+
+        Entry.AccountId = account.Id;
+    }
+}

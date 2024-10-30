@@ -1,0 +1,100 @@
+﻿@page "/entry"
+@inject IEntryService _entryService
+@inject NavigationManager NavigationManager
+
+<h2>Lançamentos</h2>
+
+<div>
+    <a class="btn btn-success" href="entry/create">Novo lançamento</a>
+</div>
+<br />
+
+@if (entries is not null)
+{
+    <table class="table table-striped">
+        <thead> 
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Data</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Carteira</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Valor</th>
+                <th scope="col">Descrição</th>
+                <th scope="col"></th>
+            </tr></thead>
+        <tbody>
+            @foreach (var entry in entries)
+            {
+                <tr>
+                    <td>@entry.Id</td>
+                    <td>@entry.Date</td>
+                    <td>@entry.Category?.Description</td>
+                    <td>@entry.Account?.Description</td>
+                    <td>@entry.Type</td>
+                    <td>@entry.Value</td>
+                    <td>@entry.Description</td>
+                    <td>
+                        <a class="btn btn-primary" href="entry/edit/@entry.Id">Editar</a> 
+                        <a class="btn btn-danger" @onclick="@(()=> Delete(entry.Id))" style=" color : white">Excluir</a> 
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <DisplayMessage ErrorMessage="Não foi possível acessar lançamentos !!!" />
+}
+<div>
+    <DisplayMessage ErrorMessage="@errorMessage" />
+</div>
+
+<ModalDialog @ref="modalDialog" onCancel="DeleteCancel" onConfirm="DeleteConfirm" Title="Exclusão">
+    <div>Deseja realmente excluir este item ?</div>
+</ModalDialog>
+
+@code {
+    private IEnumerable<EntryDto> entries = new List<EntryDto>();
+
+    private string? errorMessage;
+
+    ModalDialog? modalDialog;
+    long entryId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await LoadEntries();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            NavigationManager.NavigateTo("notauthorized");
+        }
+    }
+
+    async Task LoadEntries()
+    {
+        entries = await _entryService.GetAll();
+    }
+
+    void Delete(long id)
+    {
+        modalDialog.Show();
+        entryId = id;
+    }
+
+    void DeleteCancel()
+    {
+        modalDialog.Hide();
+    }
+
+    async Task DeleteConfirm()
+    {
+        await _entryService.Delete(entryId);
+        modalDialog.Hide();
+        await LoadEntries();
+    }
+}

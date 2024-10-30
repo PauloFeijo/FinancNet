@@ -22,6 +22,7 @@ builder.Services
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<CustomHttpHandler>()
     .AddScoped<IAccountService, AccountService>()
-    .AddScoped<ICategoryService, CategoryService>();
+    .AddScoped<ICategoryService, CategoryService>()
+    .AddScoped<IEntryService, EntryService>();
 
 await builder.Build().RunAsync();

@@ -1,0 +1,37 @@
+﻿@page "/entry/edit/{id:long}"
+@inject IEntryService _entryService
+@inject NavigationManager navigation
+
+<h2>Editar Lançamento</h2>
+
+<EntryForm 
+    Entry="@entry" 
+    OnValidSubmit="EditEntry"
+    ButtonTextCancel="Cancelar"
+    ButtonTextSubmit="Salvar">
+</EntryForm>
+
+@code {
+    private EntryDto entry = new EntryDto();
+
+    [Parameter]
+    public long Id { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        entry = await _entryService.Get(Id);
+    }
+
+    async Task EditEntry()
+    {
+        try
+        {
+            await _entryService.Update(Id, entry);
+            navigation.NavigateTo("entry");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+}

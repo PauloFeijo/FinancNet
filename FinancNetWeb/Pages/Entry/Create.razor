@@ -1,0 +1,29 @@
+﻿@page "/entry/create"
+@inject IEntryService _entryService
+@inject NavigationManager navigation
+
+<h2>Novo Lançamento</h2>
+
+<EntryForm 
+    Entry="@entry" 
+    OnValidSubmit="CreateEntry"
+    ButtonTextCancel="Cancelar"
+    ButtonTextSubmit="Salvar">
+</EntryForm>
+
+@code {
+    private EntryDto entry = new EntryDto();
+
+    async Task CreateEntry()
+    {
+        try
+        {
+            await _entryService.Create(entry);
+            navigation.NavigateTo("entry");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+}
